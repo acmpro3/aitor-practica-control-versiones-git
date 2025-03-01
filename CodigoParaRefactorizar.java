@@ -1,76 +1,37 @@
-public class CodigoParaRefactorizar{
+public class CodigoParaRefactorizar {
 
-	public double calculoIva(double precioBase) {
-		double precioFinal;
-		precioFinal = precioBase + (0.21 * precioBase); //el IVA cambia?
-		return precioFinal;
+	public double calculoIva(double precioBase, double porcentajeIva) {
+		return precioBase + (precioBase * porcentajeIva / 100);
 	}
-	
-	public double calculoIva(double precioBase, double porcentajeDescuento) {
-		double precioFinal;
-		precioFinal = precioBase + (0.21 * precioBase); //esto no lo habiamos hecho ya?
-		precioFinal = precioFinal - (precioFinal * porcentajeDescuento/100) 
-		return precioFinal;
+
+	public double calculoIvaConDescuento(double precioBase, double porcentajeIva, double porcentajeDescuento) {
+		double precioConIva = calculoIva(precioBase, porcentajeIva);
+		return precioConIva - (precioConIva * porcentajeDescuento / 100);
 	}
 
 	public int diasMes(int mes, int anio) {
-
-		int diasMes = 0;
-
-		switch (mes) {
-
-			case 1:
-	
-			case 3:
-	
-			case 5:
-	
-			case 7:
-	
-			case 8:
-	
-			case 10:
-	
-			case 12:
-				diasMes = 31;
-				break;
-	
-			case 4:
-	
-			case 6:
-	
-			case 9:
-	
-			case 11:
-				diasMes = 30;
-				break;
-	
-			case 2:
-				if (
-						(anio % 400 == 0) ||((anio % 4 == 0) && (anio % 100 != 0))  //esto se entiende?
-					) 
-	
-					diasMes = 29;
-	
-				else
-					diasMes = 28;
-	
-				break;
-	
+		int[] dias31 = {1, 3, 5, 7, 8, 10, 12};
+		for (int i = 0; i < dias31.length; i++) {
+			if (mes == dias31[i]) return 31;
 		}
-
-		return diasMes;
-
+		if (mes == 2) {
+			if ((anio % 400 == 0) || ((anio % 4 == 0) && (anio % 100 != 0))) {
+				return 29;
+			} else {
+				return 28;
+			}
+		}
+		return 30;
 	}
-	
-	
+
 	public double subidaPrecio(double precioBase, double subida) {
-		precioBase = precioBase+subida;
-		double precioConIVA = calculoIva(precioBase);
-		// es buena práctica que las salidas se externalicen y no se mezcle con la lógica
-		// potencial motivo de refactorización
-		System.out.println("El nuevo precio base es "+precioBase);
-		System.out.println("El precio con IVA es "+precioConIVA);
-		return precioBase;
+		precioBase = precioBase + subida;
+		double precioConIVA = calculoIva(precioBase, 21);
+		return precioConIVA;
+	}
+
+	public void mostrarPrecios(double precioBase, double precioConIVA) {
+		System.out.println("El nuevo precio base es " + precioBase);
+		System.out.println("El precio con IVA es " + precioConIVA);
 	}
 }
